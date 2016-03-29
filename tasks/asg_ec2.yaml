@@ -1,0 +1,17 @@
+- name: create autoscale groups without elb
+  ec2_asg:
+    name: "{{ vivareal_project_build }}"
+    health_check_period: "{{ asg_health_check_period | default(360) }}"
+    health_check_type: "{{ aws_asg_health_check_type | default('EC2') }}"
+    launch_config_name: "{{ ec2_launch_config_name }}"
+    min_size: "{{ aws_asg_min_size | default (1) }}"
+    max_size: "{{ aws_asg_max_size | default (1) }}"
+    desired_capacity: "{{ aws_asg_desired_capacity | default(1) }}"
+    region: "{{ region }}"
+    vpc_zone_identifier: "{{ ec2_asg_subnets | join(',') }}"
+    wait_for_instances: "{{ wait_for_instances | default(true) }}"
+    state: "{{ state | default('present') }}"
+    tags:
+      - "{{ aws_resource_tags }}"
+  tags: aws_asg
+  register: aws_asg

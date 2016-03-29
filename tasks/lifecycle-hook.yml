@@ -1,0 +1,15 @@
+- name: configure notification-target to us-east-1
+  set_fact: aws_asg_lifecycle_hook_sns="arn:aws:sns:us-east-1:444914307613:zabbix-terminate"
+  when: region == "us-east-1"
+
+- name: configure notification-target to sa-east-1
+  set_fact: aws_asg_lifecycle_hook_sns="arn:aws:sns:sa-east-1:444914307613:zabbix-terminate-sa-east-1"
+  when: region == "sa-east-1"
+
+- name: set lifecycle hook launching
+  shell: aws autoscaling put-lifecycle-hook --region "{{ region }}" --auto-scaling-group-name "{{ aws_asg.name }}" --notification-target-arn "{{ aws_asg_lifecycle_hook_sns }}" --role-arn "{{ aws_asg_lifecycle_iam_role | default('arn:aws:iam::444914307613:role/asg-notification') }}" --lifecycle-hook-name NewHost --lifecycle-transition autoscaling:EC2_INSTANCE_LAUNCHING
+  when: aws_asg_lifecycle_hook_sns
+  
+- name: set lifecycle hook terminate
+  shell: aws autoscaling put-lifecycle-hook --region "{{ region }}" --auto-scaling-group-name "{{ aws_asg.name }}" --notification-target-arn "{{ aws_asg_lifecycle_hook_sns }}" --role-arn "{{ aws_asg_lifecycle_iam_role | default('arn:aws:iam::444914307613:role/asg-notification') }}" --lifecycle-hook-name NewHost --lifecycle-transition autoscaling:EC2_INSTANCE_TERMINATING
+  when: aws_asg_lifecycle_hook_sns
