@@ -9,7 +9,7 @@ galaxy_info:
   galaxy_tags:
     - development
     - automation
-    - slack
+    - cloud
   platforms:
   - name: CentOS
     versions:
@@ -17,4 +17,4 @@ galaxy_info:
   - name: Ubuntu
     versions:
     - all
-dependencies: [ VivaReal.aws-lc ]
+dependencies: [ VivaReal.aws-lc, VivaReal.aws-elb ]
