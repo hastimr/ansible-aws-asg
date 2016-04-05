@@ -34,11 +34,11 @@ Role Variables
 | asg_health_check_period | no | 360 | | |
 | aws_asg_health_check_type | no | default elb when ec2_load_balancer is defined / default ec2 when ec2_load_balancer is not defined | | The service you want the health status from, Amazon EC2 or Elastic Load Balancer.|
 | aws_resource_tags  | yes  |   | | a hash/dictionary of tags to add to the new instance or for starting/stopping instance by tag; '{"key":"value"}' and '{"VREnv":"PROD","VRProject":"sample","VRTeam":"infra", "Name":"ami name"}' |
+| aws_wait_timeout | no | 600 | |  how long before wait gives up, in seconds | 
 | vivareal_project_build | yes | | |  ASG name |
 | wait_for_instances | no  | True | | Wait for the ASG instances to be in a ready state before exiting. If instances are behind an ELB, it will wait until the ELB determines all instances have a lifecycle_state of "InService" and a health_status of "Healthy".|  
 | state |  no |  present |present, absent,running, stopped| create or terminate instances  |
 | region |  yes |   || The AWS region to use. Must be specified if ec2_url is not used. If not specified then the value of the EC2_REGION environment variable, if any, is used. See http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region  |
-
 
 Output variables
 --------------
