@@ -11,6 +11,7 @@
     region: "{{ region }}"
     vpc_zone_identifier: "{{ ec2_asg_subnets | join(',') }}"
     wait_for_instances: "{{ wait_for_instances | default(true) }}"
+    wait_timeout: "{{ wait_timeout | default(600)}}"
     tags:
       - "{{ aws_resource_tags }}"
   tags: aws_asg
