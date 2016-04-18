@@ -17,4 +17,4 @@ galaxy_info:
   - name: Ubuntu
     versions:
     - all
-dependencies: [ VivaReal.aws-lc, VivaReal.aws-elb ]
+dependencies: [ VivaReal.aws-lc ]
