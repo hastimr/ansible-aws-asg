@@ -1,5 +1,8 @@
 ---
 - hosts: localhost
-  remote_user: root
+  connection: local
+  vars_files:
+    - group_vars/main.yaml
   roles:
+    - VivaReal.aws-lc
     - aws-asg

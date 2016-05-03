@@ -4,69 +4,72 @@
 - include: asg_elb.yaml
   when: ec2_load_balancer is defined
 
-# Create AutoScaling Policies
-# Scale down
-- name: Updating AutoScaling Policies
+- name: Configure Scaling Policies
   ec2_scaling_policy:
-    state: "{{ state | default('present') }}"
     region: "{{ region }}"
-    name: "{{ aws_asg.name }}-ScaleDown Policy"
-    adjustment_type: "ChangeInCapacity"
+    name: "{{ item.name }}"
     asg_name: "{{ aws_asg.name }}"
-    scaling_adjustment: "{{ aws_asg_scaledown_adjustment | default('-1')  }}"
-    min_adjustment_step: 1
-    cooldown: "{{ cooldown | default(300) }}"
-  register: aws_asg_scaledown
-
-# Scale up
-- ec2_scaling_policy:
     state: "{{ state | default('present') }}"
-    region: "{{ region }}"
-    name: "{{ aws_asg.name }}-ScaleUp Policy"
-    adjustment_type: "ChangeInCapacity"
-    asg_name: "{{ aws_asg.name }}"
-    scaling_adjustment: "{{ aws_asg_scaleup_adjustment | default('+1') }}"
-    min_adjustment_step: 1
-    cooldown: "{{ cooldown | default(300) }}"
-  register: aws_asg_scaleup
-
-# Create LOW CloudWatch Alarms for the AS Group
-# http://docs.ansible.com/ansible/ec2_metric_alarm_module.html
+    adjustment_type: "{{ item.adjustment_type }}"
+    min_adjustment_step: "{{ item.min_adjustment_step }}"
+    scaling_adjustment: "{{ item.scaling_adjustment }}"
+    cooldown: "{{ item.cooldown }}"
+  with_items:
+    ## Scale up
+    - name: "{{ aws_asg.name }}-ScaleUp Policy"
+      adjustment_type: "ChangeInCapacity"
+      scaling_adjustment: "{{ aws_asg_scaleup_adjustment | default('+1') }}"
+      min_adjustment_step: "{{ aws_asg_scaleup_min_adjustment_step | default(omit) }}"
+      cooldown: "{{ aws_asg_scaleup_cooldown | default(300) }}"
+    ## Scale down
+    - name: "{{ aws_asg.name }}-ScaleDown Policy"
+      adjustment_type: "ChangeInCapacity"
+      scaling_adjustment: "{{ aws_asg_scaledown_adjustment | default('-1')  }}"
+      min_adjustment_step: "{{ aws_asg_scaldown_min_adjustment_step | default(omit) }}"
+      cooldown: "{{ aws_asg_scaleup_cooldown | default(300) }}"
+  register: ec2_scaling_policy_result
+- debug: var=ec2_scaling_policy_result
+#
+## Create LOW CloudWatch Alarms for the AS Group
 - name: Update EC2 Low Metric Alarms
   ec2_metric_alarm:
     state: "{{ state | default('present') }}"
     region: "{{ region }}"
-    name: "{{ aws_asg.name }}-CPU-LOW"
-    metric: "{{metric | default('CPUUtilization') }}"
-    namespace: "{{ aws_alarm_type | default('AWS/EC2') }}"
-    statistic: "{{ statistic | default('Average') }}"
-    comparison: "{{ operator_low | default('<=') }}"
-    threshold: "{{ trigger_low | default(30) }}"
-    period: "{{ interval | default(300) }}"
-    evaluation_periods: "{{ interval | default(3) }}"
-    unit: "{{ unit |  default('Percent') }}"
-    description: "{{ description_low | default('Scale up ASG if {{metric}} is {{operator_low}} {{trigger_low}}') }}"
-    dimensions: {"AutoScalingGroupName": '"{{ aws_asg.name }}"'}
-    alarm_actions: ["{{ aws_asg_scaledown.arn }}"]
-  register: asg_cw_low
-  tags: asg_cw_low
-
-# Create HIGH CloudWatch Alarms for the AS Group
+    name: "{{ item.name  }}"
+    metric: "{{ item.metric }}"
+    namespace: "{{ item.namespace }}"
+    statistic: "{{ item.statistic }}"
+    comparison: "{{ item.comparison }}"
+    threshold: "{{ item.threshold }}"
+    period: "{{ item.period }}"
+    evaluation_periods: "{{ item.evaluation_periods }}"
+    unit: "{{ item.unit }}"
+    description: "{{ item.description }}"
+    dimensions: "{{ item.dimensions }}"
+    alarm_actions:
+      - "{{ ec2_scaling_policy_result.results[1].arn }}"
+  with_items: "{{ ec2_metric_alarms_down }}"
+  register: aws_ec2_metric_alarm_low_result
+- debug: var=aws_ec2_metric_alarm_low_result
+#​
+## Create HIGH CloudWatch Alarms for the AS Group
 - name: Update EC2 High Metric Alarms
   ec2_metric_alarm:
     state: "{{ state | default('present') }}"
     region: "{{ region }}"
-    name: "{{ aws_asg.name }}-CPU-HIGH"
-    metric: "{{metric | default('CPUUtilization') }}"
-    namespace: "{{ aws_alarm_type | default('AWS/EC2') }}"
-    statistic: "{{ statistic | default('Average') }}"
-    comparison: "{{ operator_high | default('>=') }}"
-    threshold: "{{ trigger_high | default(70) }}"
-    period: "{{ interval | default(300) }}"
-    unit: "{{ unit | default('Percent') }}"
-    evaluation_periods: "{{ interval | default(3) }}"
-    description: "{{ description_high | default('Scale Down ASG if {{metric}} is {{operator_high}} {{trigger_high}}')}}"
-    dimensions: {"AutoScalingGroupName": '"{{ aws_asg.name }}"'}
-    alarm_actions: ["{{aws_asg_scaleup.arn}}"]
-  register: aws_cw_high
-  tags: aws_cw_high
+    name: "{{ item.name }}"
+    metric: "{{ item.metric  }}"
+    namespace: "{{ item.namespace }}"
+    statistic: "{{ item.statistic }}"
+    comparison: "{{ item.comparison }}"
+    threshold: "{{ item.threshold }}"
+    period: "{{ item.period }}"
+    unit: "{{ item.unit }}"
+    evaluation_periods: "{{ item.evaluation_periods }}"
+    description: "{{ item.description }}"
+    dimensions: "{{ item.dimensions }}"
+    alarm_actions:
+      - "{{ ec2_scaling_policy_result.results[0].arn }}"
+  with_items: "{{ ec2_metric_alarms_up }}"
+  register: aws_ec2_metric_alarm_high_result
+- debug: var=aws_ec2_metric_alarm_high_result

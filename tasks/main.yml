@@ -4,7 +4,10 @@
   when: ansible_version.major|int != 2 and ansible_version.minor|int < 0 and ansible_version.revision|int < 1
 
 - include: asg.yml
+  when: (state is defined and not state == "absent") or state is not defined
+
 - include: lifecycle-hook.yml
-  when: aws_resource_tags.zabbix_metadata is defined
-- include: terminate_relative.yml
-  when: relative is defined and terminate_relative is defined and terminate_relative|bool == True
+  when: aws_resource_tags.zabbix_metadata is defined and (state is not defined or state == "present")
+
+- include: destroy.yml
+  when: state is defined and state == "absent"
