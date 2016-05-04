@@ -1,8 +1,5 @@
 ---
 - hosts: localhost
-  connection: local
-  vars_files:
-    - group_vars/main.yaml
+  remote_user: root
   roles:
-    - VivaReal.aws-lc
-    - aws-asg
+    - ansible-aws-asg
