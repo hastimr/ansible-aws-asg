@@ -5,6 +5,8 @@ machine:
 dependencies:
 
   pre:
+    - pip install --upgrade setuptools
+
     - pip install ansible>=2.0.1
 
     # Check ansible version
