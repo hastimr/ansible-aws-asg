@@ -1,4 +1,4 @@
-AWS ASG 
+AWS ASG  [![Circle CI](https://circleci.com/gh/VivaReal/ansible-aws-asg/tree/master.svg?style=svg&circle-token=39ff1e2f2d1e1e9fc23cca130dca267e0c3348a1)](https://circleci.com/gh/VivaReal/ansible-aws-asg/tree/master)
 =========
 
 This ansible role manage AWS asg.
