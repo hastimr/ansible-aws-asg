@@ -36,37 +36,37 @@
   ec2_metric_alarm:
     state: "{{ state | default('present') }}"
     region: "{{ region }}"
-    name: "{{ aws_asg.name }}-CPU-LOW"
-    metric: "{{metric | default('CPUUtilization') }}"
-    namespace: "{{ aws_alarm_type | default('AWS/EC2') }}"
-    statistic: "{{ statistic | default('Average') }}"
-    comparison: "{{ operator_low | default('<=') }}"
-    threshold: "{{ trigger_low | default(30) }}"
-    period: "{{ interval | default(300) }}"
-    evaluation_periods: "{{ interval | default(3) }}"
-    unit: "{{ unit |  default('Percent') }}"
-    description: "{{ description_low | default('Scale up ASG if {{metric}} is {{operator_low}} {{trigger_low}}') }}"
-    dimensions: {"AutoScalingGroupName": '"{{ aws_asg.name }}"'}
+    name: "{{ ec2_metric_alarm_metric_low_name }}"
+    metric: "{{ ec2_metric_alarm_low_metric }}"
+    namespace: "{{ ec2_metric_alarm_low_namespace }}"
+    statistic: "{{ ec2_metric_alarm_low_statistic }}"
+    comparison: "{{ ec2_metric_alarm_low_operator }}"
+    threshold: "{{ ec2_metric_alarm_low_trigger }}"
+    period: "{{ ec2_metric_alarm_low_interval }}"
+    evaluation_periods: "{{ ec2_metric_alarm_low_evaluation_periods }}"
+    unit: "{{ ec2_metric_alarm_low_unit }}"
+    description: "{{ ec2_metric_alarm_low_description }}"
+    dimensions: "{{ ec2_metric_alarm_low_dimensions }}"
     alarm_actions: ["{{ aws_asg_scaledown.arn }}"]
   register: asg_cw_low
   tags: asg_cw_low
 
 # Create HIGH CloudWatch Alarms for the AS Group
-- name: Update EC2 High Metric Alarms
+- name: Update EC2 high Metric Alarms
   ec2_metric_alarm:
     state: "{{ state | default('present') }}"
     region: "{{ region }}"
-    name: "{{ aws_asg.name }}-CPU-HIGH"
-    metric: "{{metric | default('CPUUtilization') }}"
-    namespace: "{{ aws_alarm_type | default('AWS/EC2') }}"
-    statistic: "{{ statistic | default('Average') }}"
-    comparison: "{{ operator_high | default('>=') }}"
-    threshold: "{{ trigger_high | default(70) }}"
-    period: "{{ interval | default(300) }}"
-    unit: "{{ unit | default('Percent') }}"
-    evaluation_periods: "{{ interval | default(3) }}"
-    description: "{{ description_high | default('Scale Down ASG if {{metric}} is {{operator_high}} {{trigger_high}}')}}"
-    dimensions: {"AutoScalingGroupName": '"{{ aws_asg.name }}"'}
-    alarm_actions: ["{{aws_asg_scaleup.arn}}"]
-  register: aws_cw_high
-  tags: aws_cw_high
+    name: "{{ ec2_metric_alarm_metric_high_name }}"
+    metric: "{{ ec2_metric_alarm_high_metric }}"
+    namespace: "{{ ec2_metric_alarm_high_namespace }}"
+    statistic: "{{ ec2_metric_alarm_high_statistic }}"
+    comparison: "{{ ec2_metric_alarm_high_operator }}"
+    threshold: "{{ ec2_metric_alarm_high_trigger }}"
+    period: "{{ ec2_metric_alarm_high_interval }}"
+    evaluation_periods: "{{ ec2_metric_alarm_high_evaluation_periods }}"
+    unit: "{{ ec2_metric_alarm_high_unit }}"
+    description: "{{ ec2_metric_alarm_high_description }}"
+    dimensions: "{{ ec2_metric_alarm_high_dimensions }}"
+    alarm_actions: ["{{ aws_asg_scaleup.arn }}"]
+  register: asg_cw_high
+  tags: asg_cw_high
