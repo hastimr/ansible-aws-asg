@@ -39,28 +39,28 @@ Role Variables
 | wait_for_instances | no  | True | | Wait for the ASG instances to be in a ready state before exiting. If instances are behind an ELB, it will wait until the ELB determines all instances have a lifecycle_state of "InService" and a health_status of "Healthy".|  
 | state |  no |  present |present, absent,running, stopped| create or terminate instances  |
 | region |  yes |   || The AWS region to use. Must be specified if ec2_url is not used. If not specified then the value of the EC2_REGION environment variable, if any, is used. See http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region  |
-| ec2_metric_alarm_metric_low_name | no | <Auto Scaling Group Name>-CPU-LOW | | The name of the cloudwatch alarm that will be created |
+| ec2_metric_alarm_metric_low_name | no | (Auto Scaling Group Name)-CPU-LOW | | The name of the cloudwatch alarm that will be created |
 | ec2_metric_alarm_low_metric | no | CPUUtilization | | What metric cloudwatch will monitor (Ref: http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/CW_Support_For_AWS.html) |
 | ec2_metric_alarm_low_namespace | no | AWS/EC2 | | CloudWatch namespaces are containers for metrics. Metrics in different namespaces are isolated from each other|
-| ec2_metric_alarm_low_statistic | no | Avarage | Minimum, Maximum, Sum, Average, SampleCount| Statistics are metric data aggregations over specified periods of time. |
+| ec2_metric_alarm_low_statistic | no | Average | Minimum, Maximum, Sum, Average, SampleCount| Statistics are metric data aggregations over specified periods of time. |
 | ec2_metric_alarm_low_operator| no | <= | =, >, <, >=, <=| The arithmetic operation to use when comparing the specified Statistic and Threshold. The specified Statistic value is used as the first operand.|
 | ec2_metric_alarm_low_trigger| no | 30 | | Sets the min/max bound for triggering the alarm.|
 | ec2_metric_alarm_low_interval| no | 300 | | The time (in seconds) between metric evaluations.|
 | ec2_metric_alarm_low_evaluation_periods| no | 3 | The number of times in which the metric is evaluated before final calculation. |
 | ec2_metric_alarm_low_unit| no | Percent | Seconds, Bytes, Bits, Percent, Count,  Bytes/Second, Bits/Second, Count/Second, None | The threshold's unit of measurement. |
 | ec2_metric_alarm_low_description | no | "Scale down ASG if CPUUtilization is <= 30" | |
-| ec2_metric_alarm_low_dimensions | no | {"AutoScalingGroupName": "<Auto Scaling Group Name>"} | | Describes to what the alarm is applied|
-| ec2_metric_alarm_metric_high_name | no | <Auto Scaling Group Name>-CPU-HIGH | | The name of the cloudwatch alarm that will be created |
+| ec2_metric_alarm_low_dimensions | no | {"AutoScalingGroupName": "(Auto Scaling Group Name)"} | | Describes to what the alarm is applied|
+| ec2_metric_alarm_metric_high_name | no | (Auto Scaling Group Name)-CPU-HIGH | | The name of the cloudwatch alarm that will be created |
 | ec2_metric_alarm_high_metric | no | CPUUtilization | | What metric cloudwatch will monitor (Ref: http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/CW_Support_For_AWS.html) |
 | ec2_metric_alarm_high_namespace | no | AWS/EC2 | | CloudWatch namespaces are containers for metrics. Metrics in different namespaces are isolated from each other|
-| ec2_metric_alarm_high_statistic | no | Avarage | Minimum, Maximum, Sum, Average, SampleCount| Statistics are metric data aggregations over specified periods of time. |
+| ec2_metric_alarm_high_statistic | no | Average | Minimum, Maximum, Sum, Average, SampleCount| Statistics are metric data aggregations over specified periods of time. |
 | ec2_metric_alarm_high_operator | no | >= | =, >, <, >=, <=| The arithmetic operation to use when comparing the specified Statistic and Threshold. The specified Statistic value is used as the first operand.|
 | ec2_metric_alarm_high_trigger| no | 70 | | Sets the min/max bound for triggering the alarm.|
 | ec2_metric_alarm_high_interval| no | 300 | | The time (in seconds) between metric evaluations.|
 | ec2_metric_alarm_high_evaluation_periods | no | 3 | The number of times in which the metric is evaluated before final calculation. |
 | ec2_metric_alarm_high_unit | no | Percent | Seconds, Bytes, Bits, Percent, Count,  Bytes/Second, Bits/Second, Count/Second, None | The threshold's unit of measurement. |
 | ec2_metric_alarm_high_description | no | "Scale UP ASG if CPUUtilization is >= 70" | |
-| ec2_metric_alarm_high_dimensions | no | {"AutoScalingGroupName": "<Auto Scaling Group Name>"} | | Describes to what the alarm is applied|
+| ec2_metric_alarm_high_dimensions | no | {"AutoScalingGroupName": "(Auto Scaling Group Name)"} | | Describes to what the alarm is applied|
 
 Output variables
 --------------
