@@ -3,6 +3,7 @@
     name: "{{ vivareal_project_build }}"
     health_check_period: "{{ asg_health_check_period | default(360) }}"
     health_check_type: "{{ aws_asg_health_check_type | default('EC2') }}"
+    termination_policies: "{{ aws_asg_termination_policies | default('Default') }}"
     launch_config_name: "{{ ec2_launch_config_name }}"
     min_size: "{{ aws_asg_min_size | default (1) }}"
     max_size: "{{ aws_asg_max_size | default (1) }}"
