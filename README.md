@@ -32,6 +32,7 @@ Role Variables
 | aws_asg_min_size | no | 1 | | Minimum number of instances in group, if unspecified then the current group value will be used.|
 | aws_asg_max_size | no | 1 | | Maximum number of instances in group, if unspecified then the current group value will be used.|
 | asg_health_check_period | no | 360 | | |
+| aws_asg_termination_policies | no | Default | | OldestInstance, NewestInstance, OldestLaunchConfiguration, ClosestToNextInstanceHour, Default|
 | aws_asg_health_check_type | no | default elb when ec2_load_balancer is defined / default ec2 when ec2_load_balancer is not defined | | The service you want the health status from, Amazon EC2 or Elastic Load Balancer.|
 | aws_resource_tags  | yes  |   | | a hash/dictionary of tags to add to the new instance or for starting/stopping instance by tag; '{"key":"value"}' and '{"VREnv":"PROD","VRProject":"sample","VRTeam":"infra", "Name":"ami name"}' |
 | aws_wait_timeout | no | 600 | |  how long before wait gives up, in seconds |

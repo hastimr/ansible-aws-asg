@@ -4,6 +4,7 @@
     health_check_period: "{{ asg_health_check_period | default(360) }}"
     load_balancers: "{{ ec2_load_balancer | default(None) }}"
     health_check_type: "{{ aws_asg_health_check_type | default('ELB') }}"
+    termination_policies: "{{ aws_asg_termination_policies | default('Default') }}"
     launch_config_name: "{{ ec2_launch_config_name }}"
     min_size: "{{ aws_asg_min_size | default (1) }}"
     max_size: "{{ aws_asg_max_size | default (1) }}"
@@ -16,4 +17,3 @@
       - "{{ aws_resource_tags }}"
   tags: aws_asg
   register: aws_asg
-
