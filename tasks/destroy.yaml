@@ -1,0 +1,5 @@
+- name: destroy asg
+  ec2_asg:
+    name: "{{ vivareal_project_build }}"
+    state: absent
+    region: "{{ region }}"
