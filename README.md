@@ -38,7 +38,7 @@ Role Variables
 | aws_wait_timeout | no | 600 | |  how long before wait gives up, in seconds |
 | vivareal_project_build | yes | | |  ASG name |
 | wait_for_instances | no  | True | | Wait for the ASG instances to be in a ready state before exiting. If instances are behind an ELB, it will wait until the ELB determines all instances have a lifecycle_state of "InService" and a health_status of "Healthy".|  
-| state |  no |  present |present, absent,running, stopped| create or terminate instances  |
+| state |  no |  present |present or absent| create or destroy asg |
 | region |  yes |   || The AWS region to use. Must be specified if ec2_url is not used. If not specified then the value of the EC2_REGION environment variable, if any, is used. See http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region  |
 | ec2_metric_alarm_metric_low_name | no | (Auto Scaling Group Name)-CPU-LOW | | The name of the cloudwatch alarm that will be created |
 | ec2_metric_alarm_low_metric | no | CPUUtilization | | What metric cloudwatch will monitor (Ref: http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/CW_Support_For_AWS.html) |
@@ -73,7 +73,6 @@ Output variables
 Example Playbook
 ----------------
 
-
     - hosts: localhost
       vars:
         aws_resource_tags: {
@@ -95,6 +94,15 @@ Example Playbook
       roles:
         - { role: aws-ec2-provisioning }
 
+Destroy Stack
+----------------
+
+    - hosts: localhost
+      vars:
+        vivareal_project_build: my-asg-name
+      roles:
+        - { role: aws-asg, state: absent }
+        
 Ansible modules
 --------------
 [ec2](http://docs.ansible.com/ansible/ec2_module.html)

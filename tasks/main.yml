@@ -3,11 +3,11 @@
 - fail: msg="The minimum Ansible version required to run is 2.0.1. To upgrade run 'sudo pip install --upgrade ansible'."
   when: ansible_version.major|int != 2 and ansible_version.minor|int < 0 and ansible_version.revision|int < 1
 
-- include: asg.yml
+- include: asg.yaml
   when: (state is defined and not state == "absent") or state is not defined
 
-- include: lifecycle-hook.yml
-  when: aws_resource_tags.zabbix_metadata is defined and (state is not defined or state == "present")
-
-- include: destroy.yml
+- include: destroy.yaml
   when: state is defined and state == "absent"
+
+- include: lifecycle-hook.yaml
+  when: aws_resource_tags.zabbix_metadata is defined and (state is defined and not state == "absent") or state is not defined
