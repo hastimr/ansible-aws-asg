@@ -11,7 +11,7 @@ ec2_metric_alarm_low_interval: '300'
 ec2_metric_alarm_low_evaluation_periods: '3'
 ec2_metric_alarm_low_unit: 'Percent'
 ec2_metric_alarm_low_description: 'Scale down ASG if {{ ec2_metric_alarm_low_metric }} is {{ ec2_metric_alarm_low_operator }} {{ ec2_metric_alarm_low_trigger}}'
-ec2_metric_alarm_low_dimensions: {"AutoScalingGroupName": '"{{ aws_asg.name }}"'}
+ec2_metric_alarm_low_dimensions: {"AutoScalingGroupName": "{{ aws_asg.name }}"}
 
 # Create HIGH CloudWatch Alarms for the AS Group
 ec2_metric_alarm_metric_high_name: "{{ aws_asg.name }}-CPU-HIGH"
@@ -24,4 +24,4 @@ ec2_metric_alarm_high_interval: '300'
 ec2_metric_alarm_high_evaluation_periods: '3'
 ec2_metric_alarm_high_unit: 'Percent'
 ec2_metric_alarm_high_description: 'Scale up if {{ ec2_metric_alarm_high_metric }} is {{ ec2_metric_alarm_high_operator }} {{ ec2_metric_alarm_high_trigger }}'
-ec2_metric_alarm_high_dimensions: {"AutoScalingGroupName": '"{{ aws_asg.name }}"'}
+ec2_metric_alarm_high_dimensions: {"AutoScalingGroupName": "{{ aws_asg.name }}"}
