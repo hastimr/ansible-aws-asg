@@ -9,6 +9,8 @@
     max_size: "{{ aws_asg_max_size | default (1) }}"
     desired_capacity: "{{ aws_asg_desired_capacity | default(1) }}"
     region: "{{ region }}"
+    replace_all_instances: "{{ aws_asg_replace_all_instances }}"
+    replace_batch_size: "{{ aws_asg_replace_batch_size | default(1) }}"
     vpc_zone_identifier: "{{ ec2_asg_subnets | join(',') }}"
     wait_for_instances: "{{ wait_for_instances | default(true) }}"
     state: "{{ state | default('present') }}"

@@ -12,7 +12,6 @@
     region: "{{ region }}"
     replace_all_instances: "{{ aws_asg_replace_all_instances | default(no) }}"
     replace_batch_size: "{{ aws_asg_replace_batch_size | default(1) }}"
-    replace_instances: "{{ aws_asg_replace_instances | default(None) }}"
     vpc_zone_identifier: "{{ ec2_asg_subnets | join(',') }}"
     wait_for_instances: "{{ wait_for_instances | default(true) }}"
     wait_timeout: "{{ aws_wait_timeout | default(600)}}"
