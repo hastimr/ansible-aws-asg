@@ -1,6 +1,6 @@
 - name: create autoscale groups without elb
   ec2_asg:
-    name: "{{ aws_resource_tags.Env }}-{{ aws_resource_tags.Product }}-{{ aws_resource_tags.App }}"
+    name: "{{ aws_resource_tags.Env }}-{{ aws_resource_tags.Product }}-{{ aws_resource_tags.App }}-{{ aws_resource_tags.Process }}"
     health_check_period: "{{ asg_health_check_period | default(360) }}"
     health_check_type: "{{ aws_asg_health_check_type | default('EC2') }}"
     termination_policies: "{{ aws_asg_termination_policies | default('Default') }}"
