@@ -1,5 +1,5 @@
 - name: destroy asg
   ec2_asg:
-    name: "{{ vivareal_project_build }}"
+    name: "{{ aws_resource_tags.Env }}-{{ aws_resource_tags.Product }}-{{ aws_resource_tags.App }}-{{ aws_resource_tags.Process }}"
     state: absent
     region: "{{ region }}"
